@@ -1,4 +1,16 @@
-#!/bin/sh
+#!/bin/bash
+# update roles from requirements.yml
+# add -d for only delete roles
 
-rm -rf roles/*
-ansible-galaxy install -r requirements.yml -p roles
+mkdir -p roles
+
+roles=$(grep '\- src' requirements.yml | egrep -o '[a-z\-]+\.git'|cut -d . -f 1)
+for role in $roles; do
+  if test -d roles/$role; then
+    rm -rf roles/$role
+    echo "role $role deleted"
+  fi
+done
+
+[ "$1" == "-d" ] && exit 0
+GIT_SSL_NO_VERIFY=1 ansible-galaxy install -r requirements.yml -p roles
