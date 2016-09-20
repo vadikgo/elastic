@@ -1,0 +1,6 @@
+---
+- name: Simple Example
+  hosts: group1
+  roles:
+    - { role: elasticsearch, es_instance_name: "node1" }
+  vars:

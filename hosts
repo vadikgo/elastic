@@ -1,0 +1,10 @@
+[group1]
+
+[local]
+localhost ansible_connection=local
+
+[group1_hosts:children]
+group1
+local
+
+[group1_hosts:vars]
