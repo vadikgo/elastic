@@ -1,5 +1,5 @@
 ---
-- hosts: master
+- hosts: es_hosts
   become: yes
   become_user: root
   pre_tasks:
@@ -8,43 +8,14 @@
     - name: install pip
       yum: name=python-pip
   roles:
-    - { role: ansible-elasticsearch, es_instance_name: "node1", es_heap_size: "1g",
+    - { role: ansible-elasticsearch, es_instance_name: "{{ansible_hostname}}", es_heap_size: "1g", es_data_dirs: "/opt/elasticsearch",
         es_config: {
-            cluster.name: "test-cluster",
             discovery.zen.ping.multicast.enabled: false,
-            discovery.zen.ping.unicast.hosts: "els1:9300",
+            discovery.zen.ping.unicast.hosts: "{{hostvars[groups.master[0]]['ansible_host']}}:9300",
             http.port: 9200,
             transport.tcp.port: 9300,
-            node.data: false,
-            node.master: true,
-            bootstrap.mlockall: false }
-      }
-  vars:
-    es_scripts: false
-    es_templates: false
-    es_version_lock: false
-    ansible_user: ansible
-    es_plugins:
-     - plugin: elasticsearch/license
-       version: latest
-
-- hosts: data
-  become: yes
-  become_user: root
-  pre_tasks:
-    - name: install epel
-      yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-    - name: install pip
-      yum: name=python-pip
-  roles:
-    - { role: ansible-elasticsearch, es_instance_name: "node1", es_data_dirs: "/opt/elasticsearch",
-        es_config: {
-            discovery.zen.ping.multicast.enabled: false,
-            discovery.zen.ping.unicast.hosts: "els1:9300",
-            http.port: 9201,
-            transport.tcp.port: 9301,
-            node.data: true,
-            node.master: false,
+            node.data: {{ ansible_host in (groups['data']|map('extract', hostvars, 'ansible_host')|list) }},
+            node.master: {{ ansible_host in (groups['master']|map('extract', hostvars, 'ansible_host')|list) }}
             bootstrap.mlockall: false,
             cluster.name: "test-cluster" }
       }
