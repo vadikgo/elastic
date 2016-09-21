@@ -1,10 +1,13 @@
-[es]
+[master]
+
+[data]
 
 [local]
 localhost ansible_connection=local
 
 [es_hosts:children]
-es
+master
+data
 local
 
 [es_hosts:vars]
