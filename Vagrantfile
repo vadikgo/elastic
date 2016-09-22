@@ -36,7 +36,7 @@ Vagrant.configure(2) do |config|
           ansible.verbose = "v"
           ansible.groups = {
             "master" => vm_list[0],
-            "data" => vm_list[1,2],
+            "data" => vm_list,
             "es_hosts:children" => ["master", "data"]
           }
           ansible.playbook = "multi_node.yml"

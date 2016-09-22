@@ -11,14 +11,16 @@
     - { role: ansible-elasticsearch, es_instance_name: "{{ansible_hostname}}", es_heap_size: "1g", es_data_dirs: "/opt/elasticsearch",
         es_config: {
             discovery.zen.ping.multicast.enabled: false,
-            discovery.zen.ping.unicast.hosts: "{{hostvars[groups.master[0]]['ansible_host']}}:9300",
+            discovery.zen.ping.unicast.hosts: "{{hostvars[groups.master[0]]['ansible_ssh_host']}}:9300",
             http.port: 9200,
             transport.tcp.port: 9300,
-            node.data: "{{ ansible_host in (groups['data']|map('extract', hostvars, 'ansible_host')|list) }}",
-            node.master: "{{ ansible_host in (groups['master']|map('extract', hostvars, 'ansible_host')|list) }}",
+            node.data: "{{ ansible_ssh_host in groups['data']|map('extract', hostvars, 'ansible_ssh_host')|list }}",
+            node.master: "{{ ansible_ssh_host in groups['master']|map('extract', hostvars, 'ansible_ssh_host')|list }}",
             bootstrap.mlockall: false,
             cluster.name: "test-cluster" }
       }
+  #tasks:
+  # curl -XGET http://localhost:9200/_cluster/health?pretty
   vars:
     es_scripts: false
     es_templates: false
