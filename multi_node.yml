@@ -19,8 +19,6 @@
             bootstrap.mlockall: false,
             cluster.name: "test-cluster" }
       }
-  #tasks:
-  # curl -XGET http://localhost:9200/_cluster/health?pretty
   vars:
     es_scripts: false
     es_templates: false
@@ -29,3 +27,14 @@
     es_plugins:
      - plugin: elasticsearch/license
        version: latest
+
+- hosts: master
+  tasks:
+    - name: check that cluster status is green
+      uri:
+        url: "http://localhost:9200/_cluster/health?pretty"
+        methods: GET
+        status_code: 200
+        body_format: json
+      register: cl_status
+      failed_when: cl_status.json.status != "green"
