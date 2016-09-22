@@ -12,6 +12,7 @@
         es_config: {
             discovery.zen.ping.multicast.enabled: false,
             discovery.zen.ping.unicast.hosts: "{{groups['master']|map('extract', hostvars, 'ansible_ssh_host')|list|join(':9300,')}}:9300",
+            network.host: [_site_, _local_],
             http.port: 9200,
             transport.tcp.port: 9300,
             node.data: "{{ ansible_ssh_host in groups['data']|map('extract', hostvars, 'ansible_ssh_host')|list }}",
@@ -20,6 +21,7 @@
             cluster.name: "test-cluster" }
       }
   vars:
+    es_version: "2.4.0"
     es_scripts: false
     es_templates: false
     es_version_lock: false
