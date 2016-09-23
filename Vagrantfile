@@ -30,7 +30,7 @@ Vagrant.configure(2) do |config|
           end
 
         vmn.vm.hostname = vm_name
-        vmn.vm.network :forwarded_port, guest: 9200, host: 9200+vm_index
+        vmn.vm.network :forwarded_port, guest: 9200, host: 9200
 
         vmn.vm.provision "ansible" do |ansible|
           ansible.verbose = "v"

@@ -39,4 +39,6 @@
         status_code: 200
         body_format: json
       register: cl_status
-      failed_when: cl_status.json.status != "green"
+      until: cl_status.json.status == "green"
+      retries: 30
+      delay: 10
