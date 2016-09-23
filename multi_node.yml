@@ -10,8 +10,8 @@
             network.host: [_site_, _local_],
             http.port: 9200,
             transport.tcp.port: 9300,
-            node.data: "{{ ansible_ssh_host in groups['data']|map('extract', hostvars, 'ansible_ssh_host')|list }}",
-            node.master: "{{ ansible_ssh_host in groups['master']|map('extract', hostvars, 'ansible_ssh_host')|list }}",
+            node.data: "{{ 'data' in group_names }}",
+            node.master: "{{ 'master' in group_names }}",
             bootstrap.mlockall: false,
             cluster.name: "test-cluster" }
       }
