@@ -3,7 +3,7 @@
   become: yes
   become_user: root
   roles:
-    - { role: ansible-elasticsearch, es_instance_name: "{{ansible_hostname}}", es_heap_size: "1g", es_data_dirs: "/opt/elasticsearch",
+    - { role: ansible-elasticsearch, es_instance_name: "{{ansible_hostname}}", es_heap_size: "{{ansible_memtotal_mb//2}}m", es_data_dirs: "/opt/elasticsearch",
         es_config: {
             discovery.zen.ping.multicast.enabled: false,
             discovery.zen.ping.unicast.hosts: "{{groups['master']|map('extract', hostvars, 'ansible_ssh_host')|list|join(':9300,')}}:9300",
@@ -21,8 +21,8 @@
     es_templates: false
     es_version_lock: false
     ansible_user: ansible
-    es_use_repository: no
-    es_custom_package_url: http://10.21.25.212:8000/elasticsearch/elasticsearch-2.4.0.rpm
+    #es_use_repository: no
+    #es_custom_package_url: http://10.21.25.212:8000/elasticsearch/elasticsearch-2.4.0.rpm
     es_plugins:
      - plugin: elasticsearch/license
        version: latest

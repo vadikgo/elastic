@@ -1,13 +1,7 @@
 ---
 - name: Simple Example
-  become: yes
-  become_user: root
-  hosts: es
-  pre_tasks:
-    - name: install epel
-      yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-    - name: install pip
-      yum: name=python-pip
-  roles:
-    - { role: ansible-elasticsearch, es_instance_name: "node1" }
-  vars:
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: show python
+      command: "{{ansible_python.executable}} -c 'import httplib2'"

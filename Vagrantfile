@@ -11,13 +11,13 @@ Vagrant.configure(2) do |config|
           if provider == :virtualbox
               vmn.vm.provider "virtualbox" do |vb|
                 vb.gui = false
-                vb.memory = "2048"
+                vb.memory = 1024
               end
           end
 
           if provider == :parallels
               vmn.vm.provider "parallels" do |prl|
-                prl.memory = "2048"
+                prl.memory = 1024
                 prl.name = vm_name
                 prl.linked_clone = true
                 prl.update_guest_tools = false
