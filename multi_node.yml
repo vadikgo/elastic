@@ -2,11 +2,6 @@
 - hosts: es_hosts
   become: yes
   become_user: root
-  pre_tasks:
-    - name: install epel
-      yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-    - name: install pip
-      yum: name=python-pip
   roles:
     - { role: ansible-elasticsearch, es_instance_name: "{{ansible_hostname}}", es_heap_size: "1g", es_data_dirs: "/opt/elasticsearch",
         es_config: {
@@ -26,6 +21,8 @@
     es_templates: false
     es_version_lock: false
     ansible_user: ansible
+    es_use_repository: no
+    es_custom_package_url: http://10.21.25.212:8000/elasticsearch/elasticsearch-2.4.0.rpm
     es_plugins:
      - plugin: elasticsearch/license
        version: latest
@@ -39,6 +36,6 @@
         status_code: 200
         body_format: json
       register: cl_status
-      until: cl_status.json.status == "green"
+      until: ('json' in cl_status) and cl_status.json.status == "green"
       retries: 30
       delay: 10
