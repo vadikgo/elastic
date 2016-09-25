@@ -1,0 +1,40 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: start test container
+      docker_container:
+        name: "{{name}}"
+        hostname: "{{name}}"
+        image: centos:6
+        state: started
+        tty: yes
+
+    - name: add container to inventory
+      add_host:
+        name: "{{name}}"
+        ansible_host: "{{name}}"
+        ansible_user: root
+        ansible_connection: docker
+      changed_when: false
+  vars:
+      name: test-java
+
+- hosts: test-java
+  gather_facts: no
+  tasks:
+    - name: Show java version
+      command: java -version
+      changed_when: no
+  roles:
+    - oracle-java
+
+#- hosts: localhost
+#  connection: local
+#  gather_facts: no
+#  tasks:
+#    - name: destroy build container
+#      docker_container: name:={{name}} state=absent
+#  vars:
+#      name: test-java

@@ -1,1 +1,3 @@
 - src: https://github.com/vadikgo/ansible-elasticsearch.git
+- src: https://gitlab.com/vladgo/oracle-java.git
+  scm: git

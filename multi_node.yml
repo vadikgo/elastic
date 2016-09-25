@@ -3,6 +3,7 @@
   become: yes
   become_user: root
   roles:
+    - oracle-java
     - { role: ansible-elasticsearch, es_instance_name: "{{ansible_hostname}}", es_heap_size: "{{ansible_memtotal_mb//2}}m", es_data_dirs: "/opt/elasticsearch",
         es_config: {
             discovery.zen.ping.multicast.enabled: false,
