@@ -14,7 +14,8 @@
             node.data: "{{ 'data' in group_names }}",
             node.master: "{{ 'master' in group_names }}",
             bootstrap.mlockall: false,
-            cluster.name: "test-cluster" }
+            cluster.name: "test-cluster",
+            es_java_install: no}
       }
   vars:
     es_version: "2.4.0"
